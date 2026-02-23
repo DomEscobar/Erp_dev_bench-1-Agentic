@@ -19,7 +19,8 @@ func TestItemModel(t *testing.T) {
 	db, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{})
 	assert.NoError(t, err)
 	
-	db.AutoMigrate(&models.Item{})
+	err = db.AutoMigrate(&models.Item{})
+	assert.NoError(t, err)
 	
 	item := models.Item{
 		Name:        "Test Item",

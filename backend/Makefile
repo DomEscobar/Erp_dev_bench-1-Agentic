@@ -1,4 +1,4 @@
-.PHONY: run build test clean
+.PHONY: run build test lint vet clean
 
 run:
 	go run ./cmd/main.go
@@ -9,11 +9,14 @@ build:
 test:
 	go test ./... -v -cover -coverprofile=coverage.out
 
-coverage: test
-	go tool cover -html=coverage.out -o coverage.html
+vet:
+	go vet ./...
 
 lint:
 	golangci-lint run ./...
+
+coverage: test
+	go tool cover -html=coverage.out -o coverage.html
 
 clean:
 	rm -rf bin/ erp.db coverage.out coverage.html

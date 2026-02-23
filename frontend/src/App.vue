@@ -6,6 +6,11 @@ import { RouterView } from 'vue-router'
   <RouterView />
 </template>
 
-<style>
-@import '@/design/index.scss';
+<style lang="scss">
+@use '@/design/index.scss' as *;
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+}
 </style>

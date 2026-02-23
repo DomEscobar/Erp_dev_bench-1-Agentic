@@ -10,7 +10,6 @@ import (
 // Logger returns a gin middleware for structured logging
 func Logger() gin.HandlerFunc {
 	logger, _ := zap.NewProduction()
-	defer logger.Sync()
 	
 	return func(c *gin.Context) {
 		start := time.Now()
