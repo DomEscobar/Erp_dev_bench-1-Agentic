@@ -23,6 +23,29 @@ cd backend && go run ./cmd/main.go
 cd benchmark && node runner.cjs batch
 ```
 
+## Benchmark Tasks
+
+| ID | Task | Difficulty | Files | Focus |
+|----|------|------------|-------|-------|
+| bench-001 | Items CRUD | Medium | 8 | Basic CRUD, table, form |
+| bench-002 | Categories + Relation | Medium | 10 | Relations, dropdown |
+| bench-003 | Request Logger | Hard | 10 | Middleware, filtering |
+
+### Task 1: Items CRUD
+- Backend: 5 endpoints (CRUD)
+- Frontend: Table + Form components
+- Store: Pinia items store
+
+### Task 2: Categories + Item Relation
+- Backend: 5 endpoints + Item relation
+- Frontend: Category management + dropdown in ItemForm
+- Integration: Items show category names
+
+### Task 3: Request Logger
+- Backend: Middleware + 2 endpoints
+- Frontend: Logs viewer with filters + auto-refresh
+- Features: Status filtering, method filtering, clear logs
+
 ## Benchmark CLI
 
 ```bash
@@ -59,9 +82,23 @@ node runner.cjs full-reset          # + reinstall
 |--------|----------|-------------|
 | GET | /health | Health check |
 | GET | /api/v1/health | Health check |
+| * | /api/v1/items | Items CRUD (bench-001) |
+| * | /api/v1/categories | Categories CRUD (bench-002) |
+| GET | /api/v1/logs | Request logs (bench-003) |
 
 ## Tech Stack
 
-**Frontend:** Vue 3, TypeScript, Vite, Pinia, Playwright  
+**Frontend:** Vue 3, TypeScript, Vite, Pinia, Vue Router, Playwright  
 **Backend:** Go 1.24, Gin, GORM, SQLite  
 **Benchmark:** Node.js, custom collectors
+
+## KPI Requirements
+
+All tasks must pass 4 KPIs:
+
+| KPI | Frontend | Backend |
+|-----|----------|---------|
+| Type Safety | `npm run type-check` | `go build` |
+| Lint | `npm run lint` | `golangci-lint run` |
+| Build | `npm run build` | `go build` |
+| Tests | `npm run test:unit` | `go test ./...` |

@@ -1,0 +1,66 @@
+{
+  "id": "bench-001",
+  "name": "Items CRUD API + Frontend",
+  "description": "Create a complete Items management system with CRUD API endpoints and frontend table view with add/edit functionality.",
+  "category": "fullstack",
+  "difficulty": "medium",
+  "requirements": {
+    "backend": {
+      "model": {
+        "name": "Item",
+        "fields": [
+          { "name": "ID", "type": "uint", "gorm": "primaryKey" },
+          { "name": "Name", "type": "string", "gorm": "not null", "json": "name" },
+          { "name": "Description", "type": "string", "json": "description" },
+          { "name": "Price", "type": "float64", "gorm": "not null", "json": "price" },
+          { "name": "SKU", "type": "string", "gorm": "unique", "json": "sku" },
+          { "name": "CategoryID", "type": "uint", "json": "categoryId" }
+        ]
+      },
+      "endpoints": [
+        { "method": "GET", "path": "/api/v1/items", "description": "List all items" },
+        { "method": "GET", "path": "/api/v1/items/:id", "description": "Get item by ID" },
+        { "method": "POST", "path": "/api/v1/items", "description": "Create item" },
+        { "method": "PUT", "path": "/api/v1/items/:id", "description": "Update item" },
+        { "method": "DELETE", "path": "/api/v1/items/:id", "description": "Delete item" }
+      ]
+    },
+    "frontend": {
+      "pages": ["ItemsPage.vue"],
+      "components": ["ItemsTable.vue", "ItemForm.vue"],
+      "stores": ["items.ts"],
+      "features": [
+        "Display items in table",
+        "Add new item modal/form",
+        "Edit existing item",
+        "Delete item with confirmation"
+      ]
+    },
+    "tests": {
+      "backend": "Test all CRUD operations",
+      "frontend": "Test table renders, form submits"
+    }
+  },
+  "groundTruth": {
+    "intent": "CREATE",
+    "keywords": ["item", "product", "crud", "api", "endpoint", "table", "form", "store"],
+    "expectedFiles": [
+      "backend/internal/models/item.go",
+      "backend/internal/handlers/items.go",
+      "backend/internal/handlers/items_test.go",
+      "frontend/src/pages/ItemsPage.vue",
+      "frontend/src/components/ItemsTable.vue",
+      "frontend/src/components/ItemForm.vue",
+      "frontend/src/stores/items.ts",
+      "frontend/src/router/routes.ts"
+    ],
+    "kpis": {
+      "typescript": true,
+      "lint": true,
+      "build": true,
+      "tests": true
+    }
+  },
+  "estimatedFiles": 8,
+  "estimatedTime": "15-30 min"
+}

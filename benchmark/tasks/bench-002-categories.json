@@ -1,0 +1,67 @@
+{
+  "id": "bench-002",
+  "name": "Categories CRUD + Item Relation",
+  "description": "Create Categories management and integrate with Items. Categories should be selectable in the Item form via dropdown.",
+  "category": "fullstack",
+  "difficulty": "medium",
+  "requirements": {
+    "backend": {
+      "model": {
+        "name": "Category",
+        "fields": [
+          { "name": "ID", "type": "uint", "gorm": "primaryKey" },
+          { "name": "Name", "type": "string", "gorm": "not null;unique", "json": "name" },
+          { "name": "Description", "type": "string", "json": "description" }
+        ]
+      },
+      "endpoints": [
+        { "method": "GET", "path": "/api/v1/categories", "description": "List all categories" },
+        { "method": "GET", "path": "/api/v1/categories/:id", "description": "Get category by ID" },
+        { "method": "POST", "path": "/api/v1/categories", "description": "Create category" },
+        { "method": "PUT", "path": "/api/v1/categories/:id", "description": "Update category" },
+        { "method": "DELETE", "path": "/api/v1/categories/:id", "description": "Delete category" }
+      ],
+      "integration": "Update Item model to include Category relationship and populate category data in GET /items"
+    },
+    "frontend": {
+      "pages": ["CategoriesPage.vue"],
+      "components": ["CategoriesTable.vue", "CategoryForm.vue"],
+      "stores": ["categories.ts"],
+      "features": [
+        "Display categories in table",
+        "Add/edit/delete categories",
+        "Update ItemForm to include category dropdown",
+        "Display category name in ItemsTable"
+      ]
+    },
+    "tests": {
+      "backend": "Test all CRUD operations + item-category relation",
+      "frontend": "Test category dropdown in item form"
+    }
+  },
+  "groundTruth": {
+    "intent": "CREATE",
+    "keywords": ["category", "categories", "dropdown", "relation", "select", "item"],
+    "expectedFiles": [
+      "backend/internal/models/category.go",
+      "backend/internal/models/item.go",
+      "backend/internal/handlers/categories.go",
+      "backend/internal/handlers/categories_test.go",
+      "frontend/src/pages/CategoriesPage.vue",
+      "frontend/src/components/CategoriesTable.vue",
+      "frontend/src/components/CategoryForm.vue",
+      "frontend/src/stores/categories.ts",
+      "frontend/src/components/ItemForm.vue",
+      "frontend/src/components/ItemsTable.vue"
+    ],
+    "kpis": {
+      "typescript": true,
+      "lint": true,
+      "build": true,
+      "tests": true
+    }
+  },
+  "dependencies": ["bench-001"],
+  "estimatedFiles": 10,
+  "estimatedTime": "20-35 min"
+}

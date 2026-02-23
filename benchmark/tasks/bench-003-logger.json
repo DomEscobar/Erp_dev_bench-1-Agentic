@@ -1,0 +1,71 @@
+{
+  "id": "bench-003",
+  "name": "Request Logger Middleware + Viewer",
+  "description": "Implement a request logging middleware that captures HTTP requests and stores them in memory. Create a frontend viewer with filtering and auto-refresh.",
+  "category": "fullstack",
+  "difficulty": "hard",
+  "requirements": {
+    "backend": {
+      "middleware": {
+        "name": "RequestLogger",
+        "captures": [
+          { "field": "timestamp", "type": "time.Time" },
+          { "field": "method", "type": "string" },
+          { "field": "path", "type": "string" },
+          { "field": "status", "type": "int" },
+          { "field": "duration", "type": "time.Duration" },
+          { "field": "ip", "type": "string" },
+          { "field": "userAgent", "type": "string" }
+        ],
+        "storage": "In-memory ring buffer (max 100 requests)",
+        "behavior": "Capture all requests except /health and /api/v1/logs"
+      },
+      "endpoints": [
+        { "method": "GET", "path": "/api/v1/logs", "description": "Get recent logs, query params: limit, status, method" },
+        { "method": "DELETE", "path": "/api/v1/logs", "description": "Clear all logs" }
+      ]
+    },
+    "frontend": {
+      "pages": ["LogsPage.vue"],
+      "components": ["LogsTable.vue", "LogFilters.vue"],
+      "stores": ["logs.ts"],
+      "features": [
+        "Display logs in table with columns: time, method, path, status, duration",
+        "Filter by status code (2xx, 4xx, 5xx)",
+        "Filter by HTTP method",
+        "Auto-refresh every 5 seconds (toggleable)",
+        "Clear logs button",
+        "Color-coded status badges"
+      ]
+    },
+    "tests": {
+      "backend": "Test middleware captures requests, filtering works",
+      "frontend": "Test table renders, filters work, auto-refresh toggle"
+    }
+  },
+  "groundTruth": {
+    "intent": "CREATE",
+    "keywords": ["logger", "middleware", "request", "logs", "filter", "auto-refresh", "monitoring"],
+    "expectedFiles": [
+      "backend/internal/middleware/logger.go",
+      "backend/internal/middleware/request_logger.go",
+      "backend/internal/handlers/logs.go",
+      "backend/internal/handlers/logs_test.go",
+      "backend/internal/models/request_log.go",
+      "frontend/src/pages/LogsPage.vue",
+      "frontend/src/components/LogsTable.vue",
+      "frontend/src/components/LogFilters.vue",
+      "frontend/src/stores/logs.ts",
+      "frontend/src/router/routes.ts"
+    ],
+    "kpis": {
+      "typescript": true,
+      "lint": true,
+      "build": true,
+      "tests": true
+    }
+  },
+  "dependencies": ["bench-001", "bench-002"],
+  "estimatedFiles": 10,
+  "estimatedTime": "25-40 min"
+}
