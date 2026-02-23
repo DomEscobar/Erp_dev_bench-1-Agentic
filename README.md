@@ -57,14 +57,11 @@ node runner.cjs full-reset          # + reinstall
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
+| GET | /health | Health check |
 | GET | /api/v1/health | Health check |
-| POST | /api/v1/auth/register | Register user |
-| POST | /api/v1/auth/login | Login |
-| GET | /api/v1/users | List users (JWT) |
-| GET | /api/v1/products | List products (JWT) |
 
 ## Tech Stack
 
 **Frontend:** Vue 3, TypeScript, Vite, Pinia, Playwright  
-**Backend:** Go 1.22, Gin, GORM, SQLite, JWT  
+**Backend:** Go 1.24, Gin, GORM, SQLite  
 **Benchmark:** Node.js, custom collectors
