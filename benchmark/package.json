@@ -1,0 +1,14 @@
+{
+  "name": "erp-dev-bench-benchmark",
+  "version": "1.0.0",
+  "description": "Benchmark infrastructure for testing the FutureOfDev agency",
+  "main": "runner.cjs",
+  "scripts": {
+    "run": "node runner.cjs run",
+    "batch": "node runner.cjs batch",
+    "report": "node runner.cjs report",
+    "status": "node runner.cjs status"
+  },
+  "keywords": ["benchmark", "agency", "automation"],
+  "license": "MIT"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "bench-001",
+  "name": "Create User Registration Form",
+  "description": "Create a user registration form component with email validation, password strength indicator, and form submission handling",
+  "category": "frontend",
+  "difficulty": "easy",
+  "groundTruth": {
+    "intent": "CREATE",
+    "keywords": ["user", "registration", "form", "validation"],
+    "files": ["frontend/src/components/UserRegistration.vue"]
+  }
+}

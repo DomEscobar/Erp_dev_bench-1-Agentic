@@ -1,0 +1,12 @@
+{
+  "id": "bench-002",
+  "name": "Add Product Search API",
+  "description": "Add a product search API endpoint with filtering, pagination, and caching support",
+  "category": "backend",
+  "difficulty": "medium",
+  "groundTruth": {
+    "intent": "CREATE",
+    "keywords": ["product", "search", "api", "filter", "pagination"],
+    "files": ["backend/internal/handlers/product_search.go", "backend/internal/services/search.go"]
+  }
+}

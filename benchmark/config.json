@@ -1,0 +1,44 @@
+{
+  "agencyPath": "/root/FutureOfDev/opencode",
+  "projectPath": "/root/Erp_dev_bench-1",
+  "metrics": {
+    "performance": {
+      "completionTime": true,
+      "timeToFirstCode": true,
+      "timeToKPIPass": true,
+      "iterationCount": true,
+      "throughput": true
+    },
+    "quality": {
+      "errorRate": true,
+      "testCoverage": true,
+      "codeQuality": true,
+      "lintScore": true,
+      "typeSafety": true
+    },
+    "agency": {
+      "taskSuccessRate": true,
+      "kpiPassRate": true,
+      "pmAccuracy": true,
+      "fileDiscoveryPrecision": true,
+      "contextEfficiency": true
+    },
+    "cost": {
+      "tokenUsage": true,
+      "costPerTask": true,
+      "costPerLOC": true
+    },
+    "reliability": {
+      "crashRecoveryRate": true,
+      "retryCount": true,
+      "stateAccuracy": true
+    }
+  },
+  "kpiThresholds": {
+    "maxCompletionTimeMinutes": 30,
+    "maxErrorRate": 5,
+    "minTestCoverage": 80,
+    "minCodeQuality": 7,
+    "maxIterations": 5
+  }
+}
