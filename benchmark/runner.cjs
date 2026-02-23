@@ -19,6 +19,7 @@ const { ErrorCollector } = require('./collectors/errors');
 const { TokenCollector } = require('./collectors/tokens');
 const { QualityCollector } = require('./collectors/quality');
 const { AgencyCollector } = require('./collectors/agency');
+const { ResetManager } = require('./reset');
 
 // Load config
 const CONFIG_PATH = path.join(__dirname, 'config.json');
@@ -35,6 +36,9 @@ class BenchmarkRunner {
     this.tokens = new TokenCollector();
     this.quality = new QualityCollector(this.config.projectPath);
     this.agency = new AgencyCollector(this.config.agencyPath);
+    
+    // Initialize reset manager
+    this.reset = new ResetManager(this.config.projectPath);
     
     // Results storage
     this.results = this.loadResults();
@@ -286,14 +290,33 @@ class BenchmarkRunner {
 
     console.log(`\n📦 Running ${taskFiles.length} benchmark tasks...\n`);
 
+    // Verify baseline exists, setup if not
+    if (!this.reset.verifyBaseline()) {
+      console.log('⚠️  No baseline found, setting up...\n');
+      this.reset.setupBaseline();
+    }
+
     const batchResults = [];
     
-    for (const taskFile of taskFiles) {
+    for (let i = 0; i < taskFiles.length; i++) {
+      const taskFile = taskFiles[i];
+      console.log(`\n${'═'.repeat(50)}`);
+      console.log(`TASK ${i + 1}/${taskFiles.length}`);
+      console.log(`${'═'.repeat(50)}`);
+      
+      // Reset before each task (clean slate)
+      this.reset.prepare();
+      
+      // Run benchmark
       const result = await this.runTask(taskFile);
       batchResults.push(result);
       
-      // Brief pause between tasks
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Reset after (discard agency commits)
+      this.reset.reset();
+      
+      // Save intermediate results
+      this.results.runs.push(result);
+      this.saveResults();
     }
 
     // Generate batch summary
@@ -459,7 +482,12 @@ async function main() {
         console.error('Usage: node runner.cjs run <task-file>');
         process.exit(1);
       }
+      // Reset before single run
+      if (runner.reset.verifyBaseline()) {
+        runner.reset.prepare();
+      }
       await runner.runTask(taskFile);
+      runner.reset.reset();
       break;
       
     case 'batch':
@@ -475,15 +503,34 @@ async function main() {
       runner.showStatus();
       break;
       
+    case 'setup':
+      runner.reset.setupBaseline();
+      break;
+      
+    case 'reset':
+      if (runner.reset.verifyBaseline()) {
+        runner.reset.reset();
+      } else {
+        console.log('⚠️  No baseline found. Run `node runner.cjs setup` first.');
+      }
+      break;
+      
+    case 'full-reset':
+      runner.reset.fullReset();
+      break;
+      
     default:
       console.log(`
 Agency Benchmark Runner
 
 Usage:
-  node runner.cjs run <task-file>     Run single benchmark
-  node runner.cjs batch [task-dir]    Run batch of benchmarks
-  node runner.cjs report              Generate report (MD + JSON)
-  node runner.cjs status              Show current status
+  node runner.cjs run <task>       Run single benchmark
+  node runner.cjs batch [dir]      Run batch of benchmarks
+  node runner.cjs report           Generate report (MD + JSON)
+  node runner.cjs status           Show current status
+  node runner.cjs setup            Create baseline snapshot
+  node runner.cjs reset            Reset to baseline
+  node runner.cjs full-reset       Full reset + reinstall
       `);
   }
 }
