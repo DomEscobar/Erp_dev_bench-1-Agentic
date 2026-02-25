@@ -1,0 +1,140 @@
+openapi: 3.0.3
+info:
+  title: EmpoweredPixels Product API
+  version: 1.0.0
+  description: Contract for Product management in the ERP benchmark.
+
+servers:
+  - url: /api/v1
+    description: API v1
+
+paths:
+  /products:
+    get:
+      summary: List products
+      operationId: listProducts
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Paginated product list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductListResponse'
+
+  /products/{id}:
+    get:
+      summary: Get product by ID
+      operationId: getProduct
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Product:
+      type: object
+      required:
+        - id
+        - name
+        - price
+      properties:
+        id:
+          type: string
+          example: "prod_001"
+        name:
+          type: string
+          example: "Gaming Mouse"
+        description:
+          type: string
+          example: "High-precision optical mouse"
+        price:
+          type: number
+          format: float
+          example: 49.99
+        category_id:
+          type: string
+          example: "cat_peripherals"
+        category_name:
+          type: string
+          example: "Peripherals"
+        image_urls:
+          type: array
+          items:
+            type: string
+          example: ["https://.../mouse.jpg"]
+        stock_status:
+          type: string
+          enum: [in_stock, out_of_stock, limited]
+          example: in_stock
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    ProductListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        total:
+          type: integer
+          example: 42
+        limit:
+          type: integer
+        offset:
+          type: integer
+
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          example: "PRODUCT_NOT_FOUND"
+        message:
+          type: string
+          example: "The requested product does not exist."
+        details:
+          type: object
+          additionalProperties: true
