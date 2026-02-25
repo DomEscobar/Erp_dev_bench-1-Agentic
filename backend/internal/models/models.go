@@ -9,9 +9,12 @@ type Base struct {
 	gorm.Model
 }
 
-// Example model for benchmarking
+// Item represents a product/item in the system
 type Item struct {
 	gorm.Model
-	Name        string `gorm:"not null" json:"name"`
-	Description string `json:"description"`
+	Name        string  `gorm:"not null" json:"name"`
+	Description string  `json:"description"`
+	Price       float64 `gorm:"not null" json:"price"`
+	SKU         string  `gorm:"unique" json:"sku"`
+	CategoryID  uint    `json:"categoryId"`
 }
